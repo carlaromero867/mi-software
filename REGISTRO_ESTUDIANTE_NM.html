@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro del Estudiante</title>
+  
+    <style>
+        /* Estilos de la página */
+        body {
+            font-family: Georgia, 'Times New Roman', Times, serif, sans-serif;
+            background-color: #ffffff;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+        .window h1 {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 38px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .window label {
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 16.5px;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+        }
+        .window input[type="text"],
+        .window input[type="number"] {
+            width: calc(100% - 20px);
+            padding: 5px;
+            margin-bottom: 15px;
+            border: 1px solid #000;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+        .window input[type="radio"] {
+            margin-right: 5px;
+        }
+        .radio-group {
+            display: flex;
+            justify-content: flex-start;
+            margin-bottom: 15px;
+        }
+        .radio-group label {
+            margin-right: 20px;
+            font-weight: normal;
+        }
+        .small-text {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .btn-next {
+            position: absolute;
+            bottom: 20px;
+            right: 20px;
+            background-color: #000;
+            color: #fff;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            border-radius: 4px;
+        }
+        .btn-next:hover {
+            background-color: #333;
+        }
+        .header {
+            position: absolute;
+            top: 0;
+            left: 20px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+        .clave {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-family: Georgia, 'Times New Roman', Times, serif;
+            font-size: 20px;
+            color: #000;
+        }
+    </style>
+    <script>
+        // Contador de registros, almacenado en localStorage
+        if (!localStorage.getItem('registroCount')) {
+            localStorage.setItem('registroCount', '1');
+        }
+
+        // Función para extraer las letras mayúsculas del nombre y generar la clave
+        function generarClave(nombre) {
+            let letrasMayusculas = nombre.match(/[A-Z]/g) || [];
+            let claveBase = letrasMayusculas.join('');
+            
+            // Obtener el número de registro actual y formatearlo
+            let registroCount = parseInt(localStorage.getItem('registroCount'));
+            let clave = claveBase + '_' + String(registroCount).padStart(2, '0');
+
+            // Incrementar el contador y almacenarlo
+            localStorage.setItem('registroCount', registroCount + 1);
+            return clave;
+        }
+
+        // Validar el formulario y generar la clave
+        function validarFormulario() {
+            // Obtener los elementos del formulario
+            var nombre = document.getElementById('nombre').value;
+            var sexo = document.querySelector('input[name="sexo"]:checked');
+            var edad = document.getElementById('edad').value;
+            var escuela = document.getElementById('escuela').value;
+            var grado = document.querySelector('input[name="grado"]:checked');
+            var grupo = document.getElementById('grupo').value;
+            var promedio = document.getElementById('promedio').value;
+
+            // Verifica que los campos requeridos no estén vacíos
+            if (!nombre || !sexo || !edad || !escuela || !grado || !grupo || !promedio) {
+                alert('Por favor, llena todos los campos requeridos antes de continuar.');
+                return false; // Prevenir la navegación a la siguiente página
+            }
+
+            // Generar la clave y guardarla en localStorage
+            let clave = generarClave(nombre);
+            localStorage.setItem('claveGenerada', clave);
+
+            // Redirigir a la siguiente página
+            window.location.href = 'DATOS_FAMILIARES_NM.html'; // Asegúrate de que esta URL sea correcta
+        }
+    </script>
+</head>
+<body>
+
+<div class="window">
+
+    <h1><b>Registro del Estudiante</b></h1>
+    
+    <label for="nombre">Nombre completo</label>
+    <span class="small-text">(Usando mayúsculas y minúsculas)</span>
+    <span class="small-text">Ejemplo: Monserrat Romero Miranda</span>
+    <input type="text" id="nombre" class="form-control" name="nombre" placeholder="Escribe tu nombre completo" required>
+   
+    <label>Sexo</label>
+    <div class="radio-group">
+        <label><input type="radio" name="sexo" value="Mujer">Mujer</label>
+        <label><input type="radio" name="sexo" value="Hombre">Hombre</label>
+    </div>
+
+    <label for="edad">Edad</label>
+    <input type="text" id="edad" name="edad" placeholder="Escribe tu edad " required>
+
+    <label for="escuela">Nombre de la escuela</label>
+    <input type="text" id="escuela" name="Nombre de la escuela" placeholder="Escribe el nombre de tu escuela"required>
+
+    <label>Grado que cursas</label>
+    <div class="radio-group">
+        <label><input type="radio" name="grado" value="Quinto">Quinto</label>
+        <label><input type="radio" name="grado" value="Sexto">Sexto</label>
+    </div>
+
+    <label for="grupo">Grupo </label>
+    <input type="text" id="grupo" name="grupo" placeholder= "Escribe el grupo en el que estas"required>
+
+    <label for="promedio">¿Qué promedio de calificación obtuviste?</label>
+    <span class="small-text">Ejemplo: 9.5, 9.0, 8</span>
+    <input type="text" id="promedio" name="promedio" required>
+
+    <button class="btn-next" onclick="validarFormulario()">Siguiente</button>
+</div>
+
+</body>
+</html>
